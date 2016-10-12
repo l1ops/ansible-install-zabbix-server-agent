@@ -1,0 +1,5 @@
+
+---
+- hosts: zabbix-agent
+  roles:
+    - { role: zabbix-agent, tags: ['monitor'] }

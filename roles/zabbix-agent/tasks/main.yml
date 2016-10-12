@@ -1,0 +1,39 @@
+---
+  - name: close selinux
+    replace: dest=/etc/selinux/config regexp='^SELINUX=enforcing' replace='SELINUX=disabled'
+    tags:
+     - monitor
+
+  - service: name=firewalld state=stopped
+    tags:
+     - monitor
+
+  - name: add zabbix repo
+    yum: name=http://repo.zabbix.com/zabbix/2.4/rhel/7/x86_64/zabbix-release-2.4-1.el7.noarch.rpm state=present
+    tags:
+     - monitor
+
+  - name: install zabbix
+    yum: name=zabbix-agent state=latest
+    tags:
+     - monitor
+
+  - name: Configure zabbix-agent
+    replace: dest=/etc/zabbix/zabbix_agentd.conf regexp='^Server=127.0.0.1' replace='Server=192.168.2.160'
+    tags:
+     - monitor
+
+  - name: Configure zabbix-agent ActiveServer
+    replace: dest=/etc/zabbix/zabbix_agentd.conf regexp='^ServerActive=127.0.0.1' replace='Server=192.168.2.160'
+    tags:
+     - monitor
+
+  - name: restart Zabbix-agent Service
+    service: name=zabbix-agent state=restarted
+    tags:
+     - monitor
+
+  - service: name=zabbix-agent enabled=yes
+    tags:
+     - monitor
+

@@ -1,0 +1,3 @@
+---
+- include: servers/zabbix-server.yml
+- include: servers/zabbix-agent.yml
